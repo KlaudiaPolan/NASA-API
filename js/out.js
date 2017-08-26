@@ -9884,119 +9884,125 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var PicOfTheDay = function (_React$Component) {
-        _inherits(PicOfTheDay, _React$Component);
+  var PicOfTheDay = function (_React$Component) {
+    _inherits(PicOfTheDay, _React$Component);
 
-        function PicOfTheDay(props) {
-            _classCallCheck(this, PicOfTheDay);
+    function PicOfTheDay(props) {
+      _classCallCheck(this, PicOfTheDay);
 
-            var _this = _possibleConstructorReturn(this, (PicOfTheDay.__proto__ || Object.getPrototypeOf(PicOfTheDay)).call(this, props));
+      var _this = _possibleConstructorReturn(this, (PicOfTheDay.__proto__ || Object.getPrototypeOf(PicOfTheDay)).call(this, props));
 
-            _this.state = {
-                loading: true,
-                title: '',
-                explanation: '',
-                date: '',
-                copyright: '',
-                img: ''
-            };
-            return _this;
+      _this.state = {
+        loading: true,
+        title: '',
+        explanation: '',
+        date: '',
+        copyright: '',
+        img: '',
+        media_type: '',
+        video: ''
+      };
+      return _this;
+    }
+
+    _createClass(PicOfTheDay, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        var _this2 = this;
+
+        fetch('https://api.nasa.gov/planetary/apod?api_key=NMnY548zyrPfYSxvM1mATNzhwYbOqgEkFiwV422Z').then(function (r) {
+          return r.json();
+        }).then(function (ans) {
+          console.log(ans);
+          _this2.setState({
+            title: ans.title,
+            explanation: ans.explanation,
+            date: ans.date,
+            copyright: ans.copyright,
+            img: ans.hdurl,
+            loading: false,
+            media_type: ans.media_type,
+            video: ans.url
+          });
+        });
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        if (this.state.loading) {
+          return _react2.default.createElement(
+            'div',
+            { className: 'wait' },
+            'Please, wait a minute...'
+          );
         }
-
-        _createClass(PicOfTheDay, [{
-            key: 'componentDidMount',
-            value: function componentDidMount() {
-                var _this2 = this;
-
-                fetch('https://api.nasa.gov/planetary/apod?api_key=NMnY548zyrPfYSxvM1mATNzhwYbOqgEkFiwV422Z').then(function (r) {
-                    return r.json();
-                }).then(function (ans) {
-                    console.log(ans);
-                    _this2.setState({
-                        title: ans.title,
-                        explanation: ans.explanation,
-                        date: ans.date,
-                        copyright: ans.copyright,
-                        img: ans.hdurl,
-                        loading: false
-                    });
-                });
-            }
-        }, {
-            key: 'render',
-            value: function render() {
-                if (this.state.loading) {
-                    return _react2.default.createElement(
-                        'div',
-                        { className: 'wait' },
-                        'Please, wait a minute...'
-                    );
-                }
-                return _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h1',
-                        null,
-                        'Astronomy Picture of the Day'
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        this.state.title
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        this.state.date
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'polaroid' },
-                        _react2.default.createElement('img', { src: this.state.img }),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'container' },
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                this.state.explanation
-                            ),
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Copyright: ',
-                                this.state.copyright
-                            )
-                        )
-                    )
-                );
-            }
-        }]);
-
-        return PicOfTheDay;
-    }(_react2.default.Component);
-
-    var App = function (_React$Component2) {
-        _inherits(App, _React$Component2);
-
-        function App() {
-            _classCallCheck(this, App);
-
-            return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'h1',
+            null,
+            'Astronomy Picture of the Day'
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            this.state.title
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            this.state.date
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'polaroid' },
+            this.state.media_type == "video" ? _react2.default.createElement('iframe', { src: this.state.video }) : _react2.default.createElement('img', { src: this.state.img }),
+            _react2.default.createElement(
+              'div',
+              { className: 'container' },
+              _react2.default.createElement(
+                'p',
+                null,
+                this.state.explanation
+              )
+            )
+          )
+        );
+        {
+          this.state.copyright != null & _react2.default.createElement(
+            'p',
+            null,
+            'Copyright: ',
+            this.state.copyright
+          );
         }
+      }
+    }]);
 
-        _createClass(App, [{
-            key: 'render',
-            value: function render() {
-                return _react2.default.createElement(PicOfTheDay, null);
-            }
-        }]);
+    return PicOfTheDay;
+  }(_react2.default.Component);
 
-        return App;
-    }(_react2.default.Component);
+  var App = function (_React$Component2) {
+    _inherits(App, _React$Component2);
 
-    _reactDom2.default.render(_react2.default.createElement(App, null), document.querySelector('#app'));
+    function App() {
+      _classCallCheck(this, App);
+
+      return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    }
+
+    _createClass(App, [{
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(PicOfTheDay, null);
+      }
+    }]);
+
+    return App;
+  }(_react2.default.Component);
+
+  _reactDom2.default.render(_react2.default.createElement(App, null), document.querySelector('#app'));
 });
 
 /***/ }),
